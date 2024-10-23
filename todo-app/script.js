@@ -4,7 +4,10 @@ const showName = () => {
   header.innerHTML += ` ${username}`;
 };
 
-const createTask = async () => {
+const createTask = async (event) => {
+  event.preventDefault(); // Prevent the default form submission
+  const form = event.target; // Get reference to the form
+
   const userId = sessionStorage.getItem("UserId");
   const type = document.querySelector(`#todo-type`).value.trim();
   const content = document.querySelector(`#todo-content`).value.trim();
@@ -12,7 +15,7 @@ const createTask = async () => {
 
   if (!userId || !type || !content || !endDate) {
     alert("All fields are required");
-    throw new Error("All fields are required");
+    return;
   }
 
   const data = { userId, type, content, endDate };
@@ -35,8 +38,9 @@ const createTask = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const content = await response.text();
-    alert(`Response: `, content);
+    // const content = await response.text();
+    // alert(`Response: `, content);
+    form.reset(); // clear input fields
   } catch (error) {
     console.error("Detailed error:", error);
     alert(`Error: ${error}`);
@@ -56,8 +60,11 @@ const openForm = () => {
     <label for="todo-endDate">End date</label>
     <input type="date" name="todo-endDate" id="todo-endDate">
     <br>
-    <button onclick="createTask()" id="submit-todo">Submit</button>
+    <button type="submit">Submit</button>
   `;
+
+  // Add the form submit handler
+  form.addEventListener("submit", createTask);
   document.body.append(form);
 };
 
