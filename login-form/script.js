@@ -23,9 +23,12 @@ const onLogin = async () => {
 
     const content = await response.json();
     console.log(`Response: `, content);
+    sessionStorage.setItem("UserId", content.id);
+    sessionStorage.setItem("Username", content.userName);
   } catch (error) {
     console.error(`Error: `, error);
+    return;
   }
 
-  //   window.location.href = "../registration-form/register.html"; // go to TO DO page
+  window.location.href = "../todo-app/todo.html"; // go to TO DO page
 };
