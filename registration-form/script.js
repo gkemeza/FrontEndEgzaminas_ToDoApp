@@ -1,7 +1,7 @@
-const onSubmit = async () => {
-  const username = document.querySelector(`#name`).value.trim();
-  const password = document.querySelector(`#password`).value.trim();
-  const email = document.querySelector(`#email`).value.trim();
+const onRegister = async () => {
+  const username = document.querySelector(`#signin-name`).value.trim();
+  const password = document.querySelector(`#signin-password`).value.trim();
+  const email = document.querySelector(`#signin-email`).value.trim();
 
   if (!username || !password || !email) {
     throw new Error("All fields are required");
@@ -26,9 +26,6 @@ const onSubmit = async () => {
       console.error("Server error:", errorData);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
-    const content = await response.json();
-    console.log(`Response: `, content);
   } catch (error) {
     console.error(`Error: `, error);
   }
