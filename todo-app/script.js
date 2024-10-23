@@ -4,6 +4,103 @@ const showName = () => {
   header.innerHTML += ` ${username}`;
 };
 
+const openUpdateForm = (task) => {
+  hideForm(); // Hide create form if it's open
+
+  // Remove existing update form if it exists
+  const existingForm = document.getElementById("update-form");
+  if (existingForm) {
+    existingForm.remove();
+  }
+
+  const form = document.createElement("form");
+  form.id = "update-form";
+
+  // Convert date string to YYYY-MM-DD format for input
+  const formattedDate = new Date(task.endDate).toISOString().split("T")[0];
+
+  form.innerHTML = `
+      <h3>Update Task</h3>
+      <input type="hidden" id="update-id" value="${task.id}">
+      <br>
+      <label for="update-type">Type</label>
+      <input type="text" id="update-type" value="${task.type}" autocomplete="off">
+      <br>
+      <label for="update-content">Content</label>
+      <input type="text" id="update-content" value="${task.content}" autocomplete="off">
+      <br>
+      <label for="update-endDate">End date</label>
+      <input type="date" id="update-endDate" value="${formattedDate}">
+      <br>
+      <button type="submit">Update</button>
+      <button type="button" onclick="hideUpdateForm()">Cancel</button>
+    `;
+
+  form.addEventListener("submit", updateTask);
+  document.body.append(form);
+};
+
+const updateTask = async (event) => {
+  event.preventDefault();
+
+  const taskId = document.querySelector("#update-id").value;
+  const userId = sessionStorage.getItem("UserId");
+
+  const updatedTask = {
+    id: parseInt(taskId),
+    userId,
+    type: document.querySelector("#update-type").value.trim(),
+    content: document.querySelector("#update-content").value.trim(),
+    endDate: document.querySelector("#update-endDate").value,
+  };
+
+  if (Object.values(updatedTask).some((value) => !value)) {
+    alert("All fields are required");
+    return;
+  }
+
+  try {
+    const url = `https://localhost:7171/api/ToDo/${taskId}`;
+    const response = await fetch(url, {
+      method: "PUT",
+      body: JSON.stringify(updatedTask),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    alert("Task updated successfully!");
+    hideUpdateForm();
+    showTasks(); // Refresh the task list
+  } catch (error) {
+    alert(`Error updating task: ${error.message}`);
+  }
+};
+
+const deleteTask = async (taskId) => {
+  if (!confirm("Are you sure you want to delete this task?")) return;
+
+  try {
+    const url = `https://localhost:7171/api/ToDo/${taskId}`;
+    const response = await fetch(url, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    showTasks(); // Refresh the task list
+    alert("Task deleted successfully!");
+  } catch (error) {
+    alert(`Error deleting task: ${error.message}`);
+  }
+};
+
 const showTasks = async () => {
   try {
     const url = `https://localhost:7171/api/ToDo`;
@@ -32,7 +129,10 @@ const showTasks = async () => {
         <h3>${task.type}</h3>
         <p>${task.content}</p>
         <p>Due: ${date}</p>
-        <button onclick="updateTask(${task.id})">Update</button>
+        <button onclick="openUpdateForm(${JSON.stringify(task).replace(
+          /"/g,
+          "&quot;"
+        )})">Edit</button>
         <button onclick="deleteTask(${task.id})">Delete</button>
       `;
 
@@ -83,7 +183,6 @@ const createTask = async (event) => {
 
     showTasks();
     hideForm();
-    // form.reset(); // clear input fields
   } catch (error) {
     console.error("Detailed error:", error);
     alert(`Error: ${error}`);
@@ -114,6 +213,13 @@ const openForm = () => {
 
 const hideForm = () => {
   const form = document.getElementById("toDo-form");
+  if (form) {
+    form.remove();
+  }
+};
+
+const hideUpdateForm = () => {
+  const form = document.getElementById("update-form");
   if (form) {
     form.remove();
   }
