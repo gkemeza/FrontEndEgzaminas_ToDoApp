@@ -15,20 +15,20 @@ const showTasks = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const tasks = await response.json();
+    const allTasks = await response.json();
     const userId = sessionStorage.getItem("UserId");
     const tasksDiv = document.querySelector("#toDo-tasks");
     const taskContainer = document.createElement("div");
     taskContainer.id = "task-container";
+    const userTasks = allTasks.filter((task) => task.userId === `${userId}`);
 
-    tasks.forEach((task) => {
-      if (task.userId === `${userId}`) {
-        console.log(task);
-        const date = new Date(task.endDate).toLocaleDateString();
+    userTasks.forEach((task) => {
+      console.log(task);
+      const date = new Date(task.endDate).toLocaleDateString();
 
-        const taskElement = document.createElement("div");
-        taskElement.className = "task-card";
-        taskElement.innerHTML = `
+      const taskElement = document.createElement("div");
+      taskElement.className = "task-card";
+      taskElement.innerHTML = `
         <h3>${task.type}</h3>
         <p>${task.content}</p>
         <p>Due: ${date}</p>
@@ -36,8 +36,7 @@ const showTasks = async () => {
         <button onclick="deleteTask(${task.id})">Delete</button>
       `;
 
-        taskContainer.append(taskElement);
-      }
+      taskContainer.append(taskElement);
     });
 
     tasksDiv.replaceChildren(); // remove existing tasks?
@@ -82,7 +81,9 @@ const createTask = async (event) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    form.reset(); // clear input fields
+    showTasks();
+    hideForm();
+    // form.reset(); // clear input fields
   } catch (error) {
     console.error("Detailed error:", error);
     alert(`Error: ${error}`);
@@ -91,6 +92,7 @@ const createTask = async (event) => {
 
 const openForm = () => {
   const form = document.createElement("form");
+  form.id = "toDo-form";
   form.innerHTML = `
     <br>
     <label for="todo-type">Type</label>
@@ -108,6 +110,13 @@ const openForm = () => {
   // Add the form submit handler
   form.addEventListener("submit", createTask);
   document.querySelector("#toDo-options").append(form);
+};
+
+const hideForm = () => {
+  const form = document.getElementById("toDo-form");
+  if (form) {
+    form.remove();
+  }
 };
 
 const initialData = () => {
