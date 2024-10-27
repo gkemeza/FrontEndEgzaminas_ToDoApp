@@ -5,8 +5,7 @@ const showName = () => {
 };
 
 const openUpdateForm = (task) => {
-  removeCreateForm();
-  removeUpdateForm();
+  removeUnneededForms();
 
   const form = document.createElement("form");
   form.id = "update-form";
@@ -52,7 +51,7 @@ const updateTask = async (event) => {
 
   // remove?
   if (Object.values(updatedTask).some((value) => !value)) {
-    alert("All fields are required");
+    displayEmptyFieldsError();
     return;
   }
 
@@ -69,8 +68,8 @@ const updateTask = async (event) => {
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
+      removeUpdateForm();
     }
-    removeUpdateForm();
     showExistingTasks(); // Refresh the task list
   } catch (error) {
     // change to a div window?
@@ -79,8 +78,7 @@ const updateTask = async (event) => {
 };
 
 const deleteTask = async (taskId) => {
-  removeCreateForm();
-  removeUpdateForm();
+  removeUnneededForms();
   try {
     const url = `https://localhost:7171/api/ToDo/${taskId}`;
     const response = await fetch(url, {
@@ -187,8 +185,7 @@ const createTask = async (event) => {
 };
 
 const openCreateForm = () => {
-  removeCreateForm();
-  removeUpdateForm();
+  removeUnneededForms();
 
   const form = document.createElement("form");
   form.id = "toDo-form";
@@ -233,16 +230,30 @@ const removeUpdateForm = () => {
   }
 };
 
-const displayUserNotFoundError = () => {
+const displayEmptyFieldsError = () => {
+  removeEmptyFieldsError();
   const div = document.createElement("div");
-  div.classList.add("error-container");
+  div.classList.add("error-container", "emptyFields");
 
   div.innerHTML = `
-    <h1 class="error-title">User Not Found!</h1>
+    <h1 class="error-title">All fields are required!</h1>
     <a href="" class="tryAgain-button">Try again</a>
   `;
 
   document.body.append(div);
+};
+
+const removeEmptyFieldsError = () => {
+  const div = document.querySelector(".emptyFields");
+  if (div) {
+    div.remove();
+  }
+};
+
+const removeUnneededForms = () => {
+  removeCreateForm();
+  removeUpdateForm();
+  removeEmptyFieldsError();
 };
 
 const initialData = () => {
