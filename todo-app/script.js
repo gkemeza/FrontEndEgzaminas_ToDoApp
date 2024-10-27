@@ -1,5 +1,5 @@
 const showName = () => {
-  const header = document.querySelector("h2");
+  const header = document.querySelector("#greeting");
   const username = sessionStorage.getItem("Username");
   header.innerHTML += ` ${username}`;
 };
@@ -210,6 +210,11 @@ const openForm = () => {
   // Add the form submit handler
   form.addEventListener("submit", createTask);
   document.querySelector("#toDo-options").append(form);
+};
+
+// Go to main page
+const logOff = () => {
+  window.location.href = `../main-page/index.html`;
 };
 
 const hideForm = () => {
