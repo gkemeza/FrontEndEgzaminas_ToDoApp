@@ -1,6 +1,7 @@
 const displayUserNotFoundError = () => {
+  removeUserNotFoundError();
   const div = document.createElement("div");
-  div.classList.add("error-container");
+  div.classList.add("error-container", "userNotFound");
 
   div.innerHTML = `
     <h1 class="error-title">User Not Found!</h1>
@@ -8,6 +9,13 @@ const displayUserNotFoundError = () => {
   `;
 
   document.body.append(div);
+};
+
+const removeUserNotFoundError = () => {
+  const div = document.querySelector(".userNotFound");
+  if (div) {
+    div.remove();
+  }
 };
 
 const onLogin = async () => {
