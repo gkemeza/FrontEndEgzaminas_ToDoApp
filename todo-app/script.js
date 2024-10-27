@@ -49,9 +49,7 @@ const updateTask = async (event) => {
   };
   console.log(updatedTask);
 
-  // remove?
-  if (Object.values(updatedTask).some((value) => !value)) {
-    displayEmptyFieldsError();
+  if (areEmptyFields(updatedTask)) {
     return;
   }
 
@@ -68,9 +66,9 @@ const updateTask = async (event) => {
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
-      removeUpdateForm();
     }
     showExistingTasks(); // Refresh the task list
+    removeUnneededForms();
   } catch (error) {
     // change to a div window?
     alert(`Error updating task: ${error.message}`);
@@ -159,6 +157,10 @@ const createTask = async (event) => {
   const data = { userId, type, content, endDate };
   console.log("Task data:", data);
 
+  if (areEmptyFields(data)) {
+    return;
+  }
+
   try {
     const url = `https://localhost:7171/api/ToDo`;
     const response = await fetch(url, {
@@ -177,7 +179,7 @@ const createTask = async (event) => {
     }
 
     showExistingTasks(); // Refresh the task list
-    removeCreateForm();
+    removeUnneededForms();
   } catch (error) {
     console.error("Detailed error:", error);
     alert(`Error: ${error}`);
@@ -227,6 +229,15 @@ const removeUpdateForm = () => {
   const form = document.getElementById("update-form");
   if (form) {
     form.remove();
+  }
+};
+
+const areEmptyFields = (fields) => {
+  console.log(fields);
+
+  if (Object.values(fields).some((value) => !value)) {
+    displayEmptyFieldsError();
+    return true;
   }
 };
 
