@@ -33,22 +33,23 @@ const onLogin = async () => {
     const url = `https://localhost:7171/api/Auth?username=${username}&password=${password}`;
     const response = await fetch(url, {
       method: `GET`,
+      headers: {
+        Accept: "application/json",
+      },
     });
 
     if (!response.ok) {
       // User not found
       if (response.status === 404) {
         displayUserNotFoundError();
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`User Not Found!`);
       } else {
         const errorData = await response.text();
-        console.error("Server error:", errorData);
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Authentication failed: ${errorData}`);
       }
     }
 
     const content = await response.json();
-    console.log(`Response: `, content);
     sessionStorage.setItem("UserId", content.id);
     sessionStorage.setItem("Username", content.userName);
   } catch (error) {
