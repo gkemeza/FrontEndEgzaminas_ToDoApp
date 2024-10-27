@@ -1,3 +1,15 @@
+const displayUserNotFoundError = () => {
+  const div = document.createElement("div");
+  div.classList.add("error-container");
+
+  div.innerHTML = `
+    <h1 class="error-title">User Not Found!</h1>
+    <a href="" class="tryAgain-button">Try again</a>
+  `;
+
+  document.body.append(div);
+};
+
 const onLogin = async () => {
   const username = document.querySelector(`#login-name`).value.trim();
   const password = document.querySelector(`#login-password`).value.trim();
@@ -16,9 +28,15 @@ const onLogin = async () => {
     });
 
     if (!response.ok) {
-      const errorData = await response.text();
-      console.error("Server error:", errorData);
-      throw new Error(`HTTP error! status: ${response.status}`);
+      // User not found
+      if (response.status === 404) {
+        displayUserNotFoundError();
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else {
+        const errorData = await response.text();
+        console.error("Server error:", errorData);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
     }
 
     const content = await response.json();
@@ -26,7 +44,7 @@ const onLogin = async () => {
     sessionStorage.setItem("UserId", content.id);
     sessionStorage.setItem("Username", content.userName);
   } catch (error) {
-    console.error(`Error: `, error);
+    console.error("Fetch", error);
     return;
   }
 

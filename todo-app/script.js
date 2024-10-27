@@ -5,37 +5,31 @@ const showName = () => {
 };
 
 const openUpdateForm = (task) => {
-  hideForm(); // Hide create form if it's already open
-
-  // Remove existing update form if it exists
-  const existingForm = document.getElementById("update-form");
-  if (existingForm) {
-    existingForm.remove();
-  }
+  removeCreateForm();
+  removeUpdateForm();
 
   const form = document.createElement("form");
   form.id = "update-form";
 
-  // Convert date string to YYYY-MM-DD format for input
-  const formattedDate = new Date(task.endDate).toISOString().split("T")[0];
+  // Convert date string to YYYY-MM-DD format for input?
+  const formattedDate = new Date(task.endDate).toLocaleDateString();
   console.log(formattedDate);
 
   form.innerHTML = `
-      <h3>Update Task</h3>
-      <input type="hidden" id="update-id" value="${task.id}">
-      <br>
-      <label for="update-type">Type</label>
-      <input type="text" id="update-type" value="${task.type}" autocomplete="off">
-      <br>
-      <label for="update-content">Content</label>
-      <input type="text" id="update-content" value="${task.content}" autocomplete="off">
-      <br>
-      <label for="update-endDate">End date</label>
-      <input type="date" id="update-endDate" value="${formattedDate}">
-      <br>
-      <button type="submit">Update</button>
-      <button type="button" onclick="hideUpdateForm()">Cancel</button>
-    `;
+    <h3>Update Task</h3>
+    <input type="hidden" id="update-id" value="${task.id}">
+    <br>
+    <label for="update-type">Type</label>
+    <input type="text" id="update-type" value="${task.type}" autocomplete="off">
+    <br>
+    <label for="update-content">Content</label>
+    <input type="text" id="update-content" value="${task.content}" autocomplete="off">
+    <br>
+    <label for="update-endDate">End date</label>
+    <input type="date" id="update-endDate" value="${formattedDate}">
+    <br>
+    <button type="submit">Update</button>
+  `;
 
   form.addEventListener("submit", updateTask);
   document.body.append(form);
@@ -54,6 +48,7 @@ const updateTask = async (event) => {
     content: document.querySelector("#update-content").value.trim(),
     endDate: document.querySelector("#update-endDate").value,
   };
+  console.log(updatedTask);
 
   // remove?
   if (Object.values(updatedTask).some((value) => !value)) {
@@ -75,9 +70,8 @@ const updateTask = async (event) => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    alert("Task updated successfully!");
-    hideUpdateForm();
-    showTasks(); // Refresh the task list
+    removeUpdateForm();
+    showExistingTasks(); // Refresh the task list
   } catch (error) {
     // change to a div window?
     alert(`Error updating task: ${error.message}`);
@@ -85,6 +79,8 @@ const updateTask = async (event) => {
 };
 
 const deleteTask = async (taskId) => {
+  removeCreateForm();
+  removeUpdateForm();
   try {
     const url = `https://localhost:7171/api/ToDo/${taskId}`;
     const response = await fetch(url, {
@@ -95,14 +91,14 @@ const deleteTask = async (taskId) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    showTasks(); // Refresh the task list
+    showExistingTasks(); // Refresh the task list
   } catch (error) {
     // change to a div window?
     alert(`Error deleting task: ${error.message}`);
   }
 };
 
-const showTasks = async () => {
+const showExistingTasks = async () => {
   try {
     const url = `https://localhost:7171/api/ToDo`;
     const response = await fetch(url, {
@@ -120,13 +116,18 @@ const showTasks = async () => {
     taskContainer.id = "task-container";
     const userTasks = allTasks.filter((task) => task.userId === `${userId}`);
 
-    userTasks.forEach((task) => {
-      console.log(task);
-      const date = new Date(task.endDate).toLocaleDateString();
+    if (!userTasks.length) {
+      const h3 = document.querySelector(".toDo-empty");
+      h3.innerHTML = "No tasks!";
+    } else {
+      const h3 = document.querySelector(".toDo-empty");
+      h3.innerHTML = "";
+      userTasks.forEach((task) => {
+        const date = new Date(task.endDate).toLocaleDateString();
 
-      const taskElement = document.createElement("div");
-      taskElement.className = "task-card";
-      taskElement.innerHTML = `
+        const taskElement = document.createElement("div");
+        taskElement.className = "task-card";
+        taskElement.innerHTML = `
         <h3>${task.type}</h3>
         <p>${task.content}</p>
         <p>Due: ${date}</p>
@@ -137,14 +138,14 @@ const showTasks = async () => {
         <button onclick="deleteTask(${task.id})">Delete</button>
       `;
 
-      taskContainer.append(taskElement);
-    });
+        taskContainer.append(taskElement);
+      });
+    }
 
     tasksDiv.replaceChildren(); // remove existing tasks?
     tasksDiv.append(taskContainer);
   } catch (error) {
     console.error("Detailed error:", error);
-    alert(`Error loading tasks: ${error}`);
   }
 };
 
@@ -156,11 +157,6 @@ const createTask = async (event) => {
   const type = document.querySelector(`#todo-type`).value.trim();
   const content = document.querySelector(`#todo-content`).value.trim();
   const endDate = document.querySelector(`#todo-endDate`).value.trim();
-
-  if (!userId || !type || !content || !endDate) {
-    alert("All fields are required");
-    return;
-  }
 
   const data = { userId, type, content, endDate };
   console.log("Task data:", data);
@@ -182,18 +178,22 @@ const createTask = async (event) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    showTasks();
-    hideForm();
+    showExistingTasks(); // Refresh the task list
+    removeCreateForm();
   } catch (error) {
     console.error("Detailed error:", error);
     alert(`Error: ${error}`);
   }
 };
 
-const openForm = () => {
+const openCreateForm = () => {
+  removeCreateForm();
+  removeUpdateForm();
+
   const form = document.createElement("form");
   form.id = "toDo-form";
   form.innerHTML = `
+    <h3>Add Task</h3>
     <br>
     <label for="todo-type">Type</label>
     <input type="text" name="todo-type" id="todo-type" autocomplete="off">
@@ -217,23 +217,37 @@ const logOff = () => {
   window.location.href = `../main-page/index.html`;
 };
 
-const hideForm = () => {
+// Remove create form if it exists
+const removeCreateForm = () => {
   const form = document.getElementById("toDo-form");
   if (form) {
     form.remove();
   }
 };
 
-const hideUpdateForm = () => {
+// Remove update form if it exists
+const removeUpdateForm = () => {
   const form = document.getElementById("update-form");
   if (form) {
     form.remove();
   }
 };
 
+const displayUserNotFoundError = () => {
+  const div = document.createElement("div");
+  div.classList.add("error-container");
+
+  div.innerHTML = `
+    <h1 class="error-title">User Not Found!</h1>
+    <a href="" class="tryAgain-button">Try again</a>
+  `;
+
+  document.body.append(div);
+};
+
 const initialData = () => {
   showName();
-  showTasks();
+  showExistingTasks();
 };
 
 window.onload = initialData;
