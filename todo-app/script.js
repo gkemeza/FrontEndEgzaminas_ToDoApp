@@ -5,7 +5,7 @@ const showName = () => {
 };
 
 const openUpdateForm = (task) => {
-  hideForm(); // Hide create form if it's open
+  hideForm(); // Hide create form if it's already open
 
   // Remove existing update form if it exists
   const existingForm = document.getElementById("update-form");
@@ -18,6 +18,7 @@ const openUpdateForm = (task) => {
 
   // Convert date string to YYYY-MM-DD format for input
   const formattedDate = new Date(task.endDate).toISOString().split("T")[0];
+  console.log(formattedDate);
 
   form.innerHTML = `
       <h3>Update Task</h3>
@@ -54,6 +55,7 @@ const updateTask = async (event) => {
     endDate: document.querySelector("#update-endDate").value,
   };
 
+  // remove?
   if (Object.values(updatedTask).some((value) => !value)) {
     alert("All fields are required");
     return;
@@ -77,13 +79,12 @@ const updateTask = async (event) => {
     hideUpdateForm();
     showTasks(); // Refresh the task list
   } catch (error) {
+    // change to a div window?
     alert(`Error updating task: ${error.message}`);
   }
 };
 
 const deleteTask = async (taskId) => {
-  if (!confirm("Are you sure you want to delete this task?")) return;
-
   try {
     const url = `https://localhost:7171/api/ToDo/${taskId}`;
     const response = await fetch(url, {
@@ -95,8 +96,8 @@ const deleteTask = async (taskId) => {
     }
 
     showTasks(); // Refresh the task list
-    alert("Task deleted successfully!");
   } catch (error) {
+    // change to a div window?
     alert(`Error deleting task: ${error.message}`);
   }
 };
