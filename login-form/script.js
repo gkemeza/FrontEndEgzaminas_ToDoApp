@@ -44,6 +44,7 @@ const onLogin = async () => {
         displayUserNotFoundError();
         throw new Error(`User Not Found!`);
       } else {
+        removeUserNotFoundError();
         const errorData = await response.text();
         throw new Error(`Authentication failed: ${errorData}`);
       }
