@@ -108,34 +108,39 @@ const showExistingTasks = async () => {
     const allTasks = await response.json();
     const userId = sessionStorage.getItem("UserId");
     const tasksDiv = document.querySelector("#toDo-tasks");
-    const taskContainer = document.createElement("div");
-    taskContainer.id = "task-container";
-    const userTasks = allTasks.filter((task) => task.userId === `${userId}`);
+
+    tasksDiv.replaceChildren(); // Remove existing tasks
 
     if (!userTasks.length) {
       const h3 = document.querySelector(".toDo-empty");
       h3.innerHTML = "No tasks!";
+      return;
     } else {
-      const h3 = document.querySelector(".toDo-empty");
-      h3.innerHTML = "";
-      userTasks.forEach((task) => {
-        const date = new Date(task.endDate).toLocaleDateString();
-
-        const taskElement = document.createElement("div");
-        taskElement.className = "task-card";
-        taskElement.innerHTML = `
-        <h3>${task.type}</h3>
-        <p>${task.content}</p>
-        <p>Due: ${date}</p>
-        <button class="edit-button" onclick="openUpdateForm({id: '${task.id}', type: '${task.type}', content: '${task.content}', endDate: '${task.endDate}'})">Edit</button>
-        <button class="delete-button" onclick="deleteTask(${task.id})">Delete</button>
-      `;
-
-        taskContainer.append(taskElement);
-      });
+      h3.innerHTML = ""; // Remove message if tasks exist
     }
 
-    tasksDiv.replaceChildren(); // remove existing tasks?
+    // Create and append tasks
+    const taskContainer = document.createElement("div");
+    taskContainer.id = "task-container";
+    const userTasks = allTasks.filter((task) => task.userId === `${userId}`);
+    const h3 = document.querySelector(".toDo-empty");
+
+    userTasks.forEach((task) => {
+      const date = new Date(task.endDate).toLocaleDateString();
+
+      const taskElement = document.createElement("div");
+      taskElement.className = "task-card";
+      taskElement.innerHTML = `
+      <h3>${task.type}</h3>
+      <p>${task.content}</p>
+      <p>Due: ${date}</p>
+      <button class="edit-button" onclick="openUpdateForm({id: '${task.id}', type: '${task.type}', content: '${task.content}', endDate: '${task.endDate}'})">Edit</button>
+      <button class="delete-button" onclick="deleteTask(${task.id})">Delete</button>
+    `;
+
+      taskContainer.append(taskElement);
+    });
+
     tasksDiv.append(taskContainer);
   } catch (error) {
     console.error("Detailed error:", error);

@@ -37,18 +37,12 @@ button:hover {
   background-color: rgba(0, 128, 0, 0.8);
 }
 
-/* Form Styles */
-form {
-  width: 100%;
-  max-width: 300px;
-}
-
+/* Form styles */
 label {
   display: block;
   margin: 10px 0 5px;
   color: black;
   font-size: 1rem;
-  font-weight: 500;
 }
 
 input {
@@ -71,7 +65,7 @@ input:invalid {
   border-color: red;
 }
 
-/* Error Message Styles */
+/* Error message styles */
 .error-container {
   position: fixed;
   top: 50%;
