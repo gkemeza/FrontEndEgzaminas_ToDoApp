@@ -1,6 +1,6 @@
 const onLogin = async () => {
   const username = document.querySelector(`#login-name`).value.trim();
-  const password = document.querySelector(`#login-password`).value.trim();
+  const password = document.querySelector(`#login-password`).value;
 
   if (!username || !password) {
     displayEmptyFieldsError();

@@ -1,25 +1,3 @@
-const saveIdAndUsername = async (username, password) => {
-  try {
-    const url = `https://localhost:7171/api/Auth?username=${username}&password=${password}`;
-    const response = await fetch(url, {
-      method: `GET`,
-    });
-
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error("Server error:", errorData);
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const content = await response.json();
-    sessionStorage.setItem("UserId", content.id);
-    sessionStorage.setItem("Username", content.userName);
-  } catch (error) {
-    console.error(`Error: `, error);
-    throw error;
-  }
-};
-
 const onRegister = async () => {
   const username = document.querySelector(`#signin-name`).value.trim();
   const password = document.querySelector(`#signin-password`).value;
@@ -71,6 +49,28 @@ const onRegister = async () => {
   } catch (error) {
     console.error(`Error: `, error);
     return;
+  }
+};
+
+const saveIdAndUsername = async (username, password) => {
+  try {
+    const url = `https://localhost:7171/api/Auth?username=${username}&password=${password}`;
+    const response = await fetch(url, {
+      method: `GET`,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error("Server error:", errorData);
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const content = await response.json();
+    sessionStorage.setItem("UserId", content.id);
+    sessionStorage.setItem("Username", content.userName);
+  } catch (error) {
+    console.error(`Error: `, error);
+    throw error;
   }
 };
 

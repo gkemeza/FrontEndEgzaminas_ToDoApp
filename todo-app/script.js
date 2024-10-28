@@ -76,6 +76,9 @@ const updateTask = async (event) => {
 
 const deleteTask = async (taskId) => {
   removeUnneededForms();
+  if (!confirm("Are you sure you want to delete?")) {
+    return;
+  }
   try {
     const url = `https://localhost:7171/api/ToDo/${taskId}`;
     const response = await fetch(url, {
