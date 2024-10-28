@@ -40,7 +40,7 @@ button[type="button"] {
   font-size: 0.9rem;
 }
 
-/* Form Styles */
+/* Form styles */
 label {
   display: block;
   margin: 10px 0 5px;
@@ -67,7 +67,7 @@ input:invalid {
   border-color: red;
 }
 
-/* Error Message Styles */
+/* Error message styles */
 .error-container {
   position: fixed;
   top: 50%;
