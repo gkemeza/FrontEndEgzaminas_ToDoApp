@@ -10,8 +10,8 @@ const openUpdateForm = (task) => {
   const form = document.createElement("form");
   form.id = "update-form";
 
-  // Convert date string to YYYY-MM-DD format for input?
-  const formattedDate = new Date(task.endDate).toLocaleDateString();
+  // Format as YYYY-MM-DD
+  const formattedDate = new Date(task.endDate).toISOString().split("T")[0];
   console.log(formattedDate);
 
   form.innerHTML = `
@@ -111,8 +111,10 @@ const showExistingTasks = async () => {
 
     tasksDiv.replaceChildren(); // Remove existing tasks
 
+    const userTasks = allTasks.filter((task) => task.userId === `${userId}`);
+
+    const h3 = document.querySelector(".toDo-empty");
     if (!userTasks.length) {
-      const h3 = document.querySelector(".toDo-empty");
       h3.innerHTML = "No tasks!";
       return;
     } else {
@@ -122,18 +124,17 @@ const showExistingTasks = async () => {
     // Create and append tasks
     const taskContainer = document.createElement("div");
     taskContainer.id = "task-container";
-    const userTasks = allTasks.filter((task) => task.userId === `${userId}`);
-    const h3 = document.querySelector(".toDo-empty");
 
     userTasks.forEach((task) => {
-      const date = new Date(task.endDate).toLocaleDateString();
+      // Format as YYYY-MM-DD
+      const formattedDate = new Date(task.endDate).toISOString().split("T")[0];
 
       const taskElement = document.createElement("div");
       taskElement.className = "task-card";
       taskElement.innerHTML = `
       <h3>${task.type}</h3>
       <p>${task.content}</p>
-      <p>Due: ${date}</p>
+      <p>Due: ${formattedDate}</p>
       <button class="edit-button" onclick="openUpdateForm({id: '${task.id}', type: '${task.type}', content: '${task.content}', endDate: '${task.endDate}'})">Edit</button>
       <button class="delete-button" onclick="deleteTask(${task.id})">Delete</button>
     `;

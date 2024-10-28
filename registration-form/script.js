@@ -27,12 +27,16 @@ const onRegister = async () => {
 
   if (!username || !password || !email) {
     displayEmptyFieldsError();
-    throw new Error("All fields are required");
+    return;
   }
 
   // Validations
-  passwordValidation(password);
-  emailValidation(email);
+  try {
+    passwordValidation(password);
+    emailValidation(email);
+  } catch (error) {
+    return; // Stop further execution on validation failure
+  }
 
   const data = { username, password, email };
   console.log("Sending data:", data);
@@ -54,7 +58,7 @@ const onRegister = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // use login fetch to get user id
+    // Use login fetch to get user id
     await saveIdAndUsername(username, password);
 
     window.location.href = "../todo-app/todo.html"; // go to TO DO page
@@ -151,4 +155,9 @@ const emailValidation = (email) => {
     displayWrongEmailError();
     throw new Error("Invalid email");
   }
+};
+
+const togglePasswordVisibility = () => {
+  const passwordField = document.getElementById("signin-password");
+  passwordField.type = passwordField.type === "password" ? "text" : "password";
 };

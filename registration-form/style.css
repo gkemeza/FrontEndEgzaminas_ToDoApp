@@ -37,6 +37,11 @@ button:hover {
   background-color: rgba(0, 128, 0, 0.8);
 }
 
+button[type="button"] {
+  font-size: 0.9rem;
+  width: auto;
+}
+
 /* Form styles */
 label {
   display: block;
