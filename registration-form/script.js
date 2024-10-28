@@ -30,31 +30,9 @@ const onRegister = async () => {
     throw new Error("All fields are required");
   }
 
-  // Password validation
-  const minLength = 8;
-  const hasUpperCase = /[A-Z]/;
-  const hasLowerCase = /[a-z]/;
-  const hasDigit = /\d/;
-  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
-
-  if (
-    !(
-      password.length >= minLength &&
-      hasUpperCase.test(password) &&
-      hasLowerCase.test(password) &&
-      hasDigit.test(password) &&
-      hasSpecialChar.test(password)
-    )
-  ) {
-    displayWrongPasswordError();
-    throw new Error("Invalid password!");
-  }
-
-  // Email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    throw new Error("Invalid email");
-  }
+  // Validations
+  passwordValidation(password);
+  emailValidation(email);
 
   const data = { username, password, email };
   console.log("Sending data:", data);
@@ -92,7 +70,7 @@ const displayWrongPasswordError = () => {
   div.classList.add("error-container", "wrongPassword");
 
   div.innerHTML = `
-    <h1 class="error-title">Password must be at least 8 characters long, include uppercase, lowercase, a number, and a special character.!</h1>
+    <h1 class="error-title">Password must be at least 8 characters long, include uppercase, lowercase, a number, and a special character!</h1>
     <a href="" class="tryAgain-button">Try again</a>
   `;
 
@@ -120,7 +98,7 @@ const displayWrongEmailError = () => {
 };
 
 const removeWrongEmailError = () => {
-  const div = document.querySelector(".wrongPassword");
+  const div = document.querySelector(".wrongEmail");
   if (div) {
     div.remove();
   }
@@ -143,5 +121,34 @@ const removeEmptyFieldsError = () => {
   const div = document.querySelector(".emptyFields");
   if (div) {
     div.remove();
+  }
+};
+
+const passwordValidation = (password) => {
+  const minLength = 8;
+  const hasUpperCase = /[A-Z]/;
+  const hasLowerCase = /[a-z]/;
+  const hasDigit = /\d/;
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
+
+  if (
+    !(
+      password.length >= minLength &&
+      hasUpperCase.test(password) &&
+      hasLowerCase.test(password) &&
+      hasDigit.test(password) &&
+      hasSpecialChar.test(password)
+    )
+  ) {
+    displayWrongPasswordError();
+    throw new Error("Invalid password!");
+  }
+};
+
+const emailValidation = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    displayWrongEmailError();
+    throw new Error("Invalid email");
   }
 };

@@ -60,3 +60,23 @@ const onLogin = async () => {
 
   window.location.href = "../todo-app/todo.html"; // go to TO DO page
 };
+
+const displayWrongPasswordError = () => {
+  removeWrongPasswordError();
+  const div = document.createElement("div");
+  div.classList.add("error-container", "wrongPassword");
+
+  div.innerHTML = `
+    <h1 class="error-title">Wrong password!</h1>
+    <a href="" class="tryAgain-button">Try again</a>
+  `;
+
+  document.body.append(div);
+};
+
+const removeWrongPasswordError = () => {
+  const div = document.querySelector(".wrongPassword");
+  if (div) {
+    div.remove();
+  }
+};
