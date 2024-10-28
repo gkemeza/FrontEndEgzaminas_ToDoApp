@@ -1,13 +1,9 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
   font-family: Arial, sans-serif;
 }
 
 body {
   background-color: white;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,7 +25,6 @@ button {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s;
 }
 
 button:hover {
@@ -40,7 +35,6 @@ button[type="button"] {
   font-size: 0.9rem;
 }
 
-/* Form styles */
 label {
   display: block;
   margin: 10px 0 5px;
@@ -67,7 +61,6 @@ input:invalid {
   border-color: red;
 }
 
-/* Error message styles */
 .error-container {
   position: fixed;
   top: 50%;
@@ -94,7 +87,6 @@ input:invalid {
   text-decoration: none;
   padding: 10px 20px;
   border-radius: 4px;
-  transition: background-color 0.3s;
 }
 
 .tryAgain-button:hover {
