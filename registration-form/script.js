@@ -53,9 +53,15 @@ const onRegister = async () => {
     });
 
     if (!response.ok) {
-      const errorData = await response.text();
-      console.error("Server error:", errorData);
-      throw new Error(`HTTP error! status: ${response.status}`);
+      // User exists
+      if (response.status === 400) {
+        displayUserExistsError();
+        throw new Error(`User exists!`);
+      } else {
+        const errorData = await response.text();
+        console.error("Server error:", errorData);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
     }
 
     // Use login fetch to get user id
@@ -123,6 +129,26 @@ const displayEmptyFieldsError = () => {
 
 const removeEmptyFieldsError = () => {
   const div = document.querySelector(".emptyFields");
+  if (div) {
+    div.remove();
+  }
+};
+
+const displayUserExistsError = () => {
+  removeUserExistsError();
+  const div = document.createElement("div");
+  div.classList.add("error-container", "userExists");
+
+  div.innerHTML = `
+    <h1 class="error-title">User already exists!</h1>
+    <a href="" class="tryAgain-button">Try again</a>
+  `;
+
+  document.body.append(div);
+};
+
+const removeUserExistsError = () => {
+  const div = document.querySelector(".userExists");
   if (div) {
     div.remove();
   }
