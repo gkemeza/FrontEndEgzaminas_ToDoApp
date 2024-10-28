@@ -24,8 +24,8 @@ const onLogin = async () => {
       if (response.status === 404) {
         displayUserNotFoundError();
         throw new Error(`User Not Found!`);
-        // Wrong password
-      } else if (response.status === 400) {
+      } // Wrong password
+      else if (response.status === 400) {
         displayWrongPasswordError();
         throw new Error(`Incorrect Password!`);
       } else {
