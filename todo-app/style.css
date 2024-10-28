@@ -26,13 +26,13 @@ header {
 }
 
 #greeting {
-  color: #333;
-  font-size: 1.8rem;
+  color: black;
+  font-size: 2rem;
 }
 
 /* Button Styles */
 button {
-  background-color: #4caf50;
+  background-color: green;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -44,15 +44,15 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: rgba(0, 128, 0, 0.8);
 }
 
 header button {
-  background-color: #ff4444;
+  background-color: red;
 }
 
 header button:hover {
-  background-color: #ff3333;
+  background-color: rgba(255, 0, 0, 0.8);
 }
 
 /* Task Container Styles */
@@ -78,7 +78,7 @@ header button:hover {
 /* Task Card Styles */
 .task-card {
   background-color: white;
-  border: 1px solid #ddd;
+  border: 1px solid gainsboro;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -91,13 +91,13 @@ header button:hover {
 }
 
 .task-card h3 {
-  color: #333;
+  color: rgba(0, 0, 0, 0.8);
   margin-bottom: 10px;
   font-size: 1.2rem;
 }
 
 .task-card p {
-  color: #666;
+  color: rgba(0, 0, 0, 0.5);
   margin-bottom: 15px;
   font-size: 0.95rem;
 }
@@ -108,8 +108,8 @@ header button:hover {
   font-size: 0.9rem;
 }
 
-.task-card button:last-child {
-  background-color: #ff4444;
+.task-card .delete-button {
+  background-color: red;
 }
 
 /* Form Styles */
@@ -118,7 +118,7 @@ form {
   padding: 25px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ddd;
+  border: 1px solid gainsboro;
   max-width: 400px;
   width: 100%;
   margin: 20px auto;
@@ -143,7 +143,7 @@ input {
   width: 100%;
   padding: 12px;
   margin-bottom: 15px;
-  border: 1px solid #ddd;
+  border: 1px solid gainsboro;
   border-radius: 4px;
   font-size: 1rem;
   transition: border-color 0.3s, box-shadow 0.3s;
@@ -151,7 +151,7 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #4caf50;
+  border-color: green;
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
 }
 
@@ -166,19 +166,19 @@ input:focus {
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  border: 1px solid #ff4444;
+  border: 1px solid red;
   z-index: 1000;
 }
 
 .error-title {
-  color: #ff4444;
+  color: red;
   font-size: 1.5rem;
   margin-bottom: 20px;
 }
 
 .tryAgain-button {
   display: inline-block;
-  background-color: #ff4444;
+  background-color: red;
   color: white;
   text-decoration: none;
   padding: 10px 20px;
@@ -187,11 +187,11 @@ input:focus {
 }
 
 .tryAgain-button:hover {
-  background-color: #ff3333;
+  background-color: rgba(255, 0, 0, 0.8);
 }
 
 .toDo-empty {
-  color: #666;
+  color: rgba(0, 0, 0, 0.8);
   font-size: 1.2rem;
   margin: 20px 0;
 }

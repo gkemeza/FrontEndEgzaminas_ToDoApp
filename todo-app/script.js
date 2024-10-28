@@ -127,11 +127,8 @@ const showExistingTasks = async () => {
         <h3>${task.type}</h3>
         <p>${task.content}</p>
         <p>Due: ${date}</p>
-        <button onclick="openUpdateForm(${JSON.stringify(task).replace(
-          /"/g,
-          "&quot;"
-        )})">Edit</button>
-        <button onclick="deleteTask(${task.id})">Delete</button>
+        <button class="edit-button" onclick="openUpdateForm({id: '${task.id}', type: '${task.type}', content: '${task.content}', endDate: '${task.endDate}'})">Edit</button>
+        <button class="delete-button" onclick="deleteTask(${task.id})">Delete</button>
       `;
 
         taskContainer.append(taskElement);

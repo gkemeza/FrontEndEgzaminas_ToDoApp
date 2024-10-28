@@ -12,10 +12,21 @@
 
   <body>
     <label for="signin-name">Name</label>
-    <input type="text" name="signin-name" id="signin-name" autocomplete="off" />
+    <input
+      type="text"
+      name="signin-name"
+      id="signin-name"
+      autocomplete="off"
+      required
+    />
     <br />
     <label for="signin-password">Password</label>
-    <input type="password" name="signin-password" id="signin-password" />
+    <input
+      type="password"
+      name="signin-password"
+      id="signin-password"
+      required
+    />
     <br />
     <label for="signin-email">Email</label>
     <input
@@ -23,6 +34,7 @@
       name="signin-email"
       id="signin-email"
       autocomplete="off"
+      required
     />
     <br />
     <button onclick="onRegister()">Register</button>

@@ -15,13 +15,13 @@ body {
 }
 
 h1 {
-  color: #333;
+  color: black;
   margin-bottom: 30px;
   font-size: 2.5rem;
 }
 
 button {
-  background-color: #4caf50;
+  background-color: green;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -34,7 +34,7 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: rgba(0, 128, 0, 0.8);
 }
 
 /* Form Styles */
@@ -46,7 +46,7 @@ form {
 label {
   display: block;
   margin: 10px 0 5px;
-  color: #333;
+  color: black;
   font-size: 1rem;
   font-weight: 500;
 }
@@ -55,7 +55,7 @@ input {
   width: 300px;
   padding: 12px;
   margin-bottom: 15px;
-  border: 1px solid #ddd;
+  border: 1px solid gainsboro;
   border-radius: 4px;
   font-size: 1rem;
   transition: border-color 0.3s, box-shadow 0.3s;
@@ -63,16 +63,12 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #4caf50;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+  border-color: green;
+  box-shadow: 0 0 5px rgba(0, 128, 128, 0.3);
 }
 
 input:invalid {
-  border-color: #ff4444;
-}
-
-input[type="email"]:invalid {
-  border-color: #ff4444;
+  border-color: red;
 }
 
 /* Error Message Styles */
