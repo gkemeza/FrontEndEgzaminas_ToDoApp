@@ -70,7 +70,6 @@ const updateTask = async (event) => {
     showExistingTasks(); // Refresh the task list
     removeUnneededForms();
   } catch (error) {
-    // change to a div window?
     alert(`Error updating task: ${error.message}`);
   }
 };
@@ -89,7 +88,6 @@ const deleteTask = async (taskId) => {
 
     showExistingTasks(); // Refresh the task list
   } catch (error) {
-    // change to a div window?
     alert(`Error deleting task: ${error.message}`);
   }
 };
@@ -150,7 +148,6 @@ const showExistingTasks = async () => {
 
 const createTask = async (event) => {
   event.preventDefault(); // Prevent the default form submission
-  const form = event.target; // Get reference to the form
 
   const userId = sessionStorage.getItem("UserId");
   const type = document.querySelector(`#todo-type`).value.trim();
