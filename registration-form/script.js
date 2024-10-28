@@ -22,11 +22,38 @@ const saveIdAndUsername = async (username, password) => {
 
 const onRegister = async () => {
   const username = document.querySelector(`#signin-name`).value.trim();
-  const password = document.querySelector(`#signin-password`).value.trim();
+  const password = document.querySelector(`#signin-password`).value;
   const email = document.querySelector(`#signin-email`).value.trim();
 
   if (!username || !password || !email) {
+    displayEmptyFieldsError();
     throw new Error("All fields are required");
+  }
+
+  // Password validation
+  const minLength = 8;
+  const hasUpperCase = /[A-Z]/;
+  const hasLowerCase = /[a-z]/;
+  const hasDigit = /\d/;
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
+
+  if (
+    !(
+      password.length >= minLength &&
+      hasUpperCase.test(password) &&
+      hasLowerCase.test(password) &&
+      hasDigit.test(password) &&
+      hasSpecialChar.test(password)
+    )
+  ) {
+    displayWrongPasswordError();
+    throw new Error("Invalid password!");
+  }
+
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    throw new Error("Invalid email");
   }
 
   const data = { username, password, email };
@@ -56,5 +83,65 @@ const onRegister = async () => {
   } catch (error) {
     console.error(`Error: `, error);
     return;
+  }
+};
+
+const displayWrongPasswordError = () => {
+  removeWrongPasswordError();
+  const div = document.createElement("div");
+  div.classList.add("error-container", "wrongPassword");
+
+  div.innerHTML = `
+    <h1 class="error-title">Password must be at least 8 characters long, include uppercase, lowercase, a number, and a special character.!</h1>
+    <a href="" class="tryAgain-button">Try again</a>
+  `;
+
+  document.body.append(div);
+};
+
+const removeWrongPasswordError = () => {
+  const div = document.querySelector(".wrongPassword");
+  if (div) {
+    div.remove();
+  }
+};
+
+const displayWrongEmailError = () => {
+  removeWrongEmailError();
+  const div = document.createElement("div");
+  div.classList.add("error-container", "wrongEmail");
+
+  div.innerHTML = `
+    <h1 class="error-title">Invalid email!</h1>
+    <a href="" class="tryAgain-button">Try again</a>
+  `;
+
+  document.body.append(div);
+};
+
+const removeWrongEmailError = () => {
+  const div = document.querySelector(".wrongPassword");
+  if (div) {
+    div.remove();
+  }
+};
+
+const displayEmptyFieldsError = () => {
+  removeEmptyFieldsError();
+  const div = document.createElement("div");
+  div.classList.add("error-container", "emptyFields");
+
+  div.innerHTML = `
+    <h1 class="error-title">All fields are required!</h1>
+    <a href="" class="tryAgain-button">Try again</a>
+  `;
+
+  document.body.append(div);
+};
+
+const removeEmptyFieldsError = () => {
+  const div = document.querySelector(".emptyFields");
+  if (div) {
+    div.remove();
   }
 };
